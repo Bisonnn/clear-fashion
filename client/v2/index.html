@@ -23,24 +23,24 @@
         <span>By reasonable price</span>
         <span>By recently released</span>
         <div id="brand">
-          <label for="brand-select">By brands:</label>
-          <select name="brand" id="brand-select"> </select>
+          <label for="brand-filter">Filter by brand:</label>
+          <input type="text" id="brand-filter" placeholder="Enter brand name">
         </div>
       </div>
       <div id="sort">
-        <label for="sort-select">Sort:</label>
-        <select name="sort" id="sort-select">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select">
           <option value="price-asc">Cheaper</option>
           <option value="price-desc">Expensive</option>
-          <option value="date-asc">Recently released</option>
-          <option value="date-desc">Anciently released</option>
+          <option value="date-desc">Recently Released</option>
+          <option value="date-asc">Anciently Released</option>
         </select>
       </div>
     </section>
     <section id="indicators">
       <h2>Indicators</h2>
       <div>
-        <span>Number of products</span>
+        <span>Number of recent products</span>
         <span id="nbProducts">0</span>
       </div>
       <div>
@@ -48,20 +48,21 @@
         <span id="nbBrands">0</span>
       </div>
       <div>
-        <span>Number of new products</span>
-        <span>0</span>
+        <span>Number of recent products</span>
+        <span id="nbRecentProducts">0</span>
+      </div>
       </div>
       <div>
-        <span>p50 price value</span>
-        <span>0</span>
+        <span>Median price</span>
+        <span id="medianPrice">0</span>
       </div>
       <div>
-        <span>p90 price value</span>
-        <span>0</span>
+        <span>90th percentile price</span>
+        <span id="percentilePrice90">0</span>
       </div>
       <div>
-        <span>p95 price value</span>
-        <span>0</span>
+        <span>95th percentile price</span>
+        <span id="percentilePrice95">0</span>
       </div>
       <div>
         <span>Last released date</span>
