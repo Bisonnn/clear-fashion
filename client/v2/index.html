@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1>Clear fashion</h1>
+    <h1>👕Clear fashion👕</h1>
     <section id="options">
       <div id="show">
         <label for="show-select">Show:</label>
@@ -20,8 +22,6 @@
         <select name="page" id="page-select"> </select>
       </div>
       <div id="filters">
-        <span>By reasonable price</span>
-        <span>By recently released</span>
         <div id="brand">
           <label for="brand-filter">Filter by brand:</label>
           <input type="text" id="brand-filter" placeholder="Enter brand name">
@@ -40,7 +40,7 @@
     <section id="indicators">
       <h2>Indicators</h2>
       <div>
-        <span>Number of recent products</span>
+        <span>Number products</span>
         <span id="nbProducts">0</span>
       </div>
       <div>
@@ -66,10 +66,14 @@
       </div>
       <div>
         <span>Last released date</span>
-        <span>2020-01-01</span>
+        <span id="lastUpdate">---</span>
       </div>
     </section>
     <section id="products"></section>
     <script type="text/javascript" charset="UTF-8" src="portfolio.js"></script>
+    </section>
   </body>
 </html>
+
+
+

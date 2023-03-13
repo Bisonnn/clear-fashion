@@ -1,0 +1,79 @@
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Basic typography */
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+  }
+  
+  h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  table {
+    margin: 0 auto;
+    width: 50%;
+    border-collapse: collapse;
+    text-align: left;
+    border: 1px solid #333;
+    border-style: double;
+
+
+
+  }
+  
+  section {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Form styles */
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold
+  }
+
+    input {
+        display: block;
+        width: 20%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+        margin-left: 40%;
+    }
+
+    .error {
+        color: #f00;
+    }
+
+    .success {
+        color: #0f0;
+    }
+
+    /* background */
+
+    body {
+        background-image: url("https://i.pinimg.com/564x/c1/f0/b3/c1f0b38505d286dcb53789dbe3c1acd0.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+

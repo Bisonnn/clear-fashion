@@ -25,9 +25,11 @@ const spanNbNewProducts = document.querySelector('#nbRecentProducts');
 const spanNbBrands = document.querySelector('#nbBrands');
 const inputBrandFilter = document.querySelector('#brand-filter');
 const selectSort = document.querySelector('#sort-select');
-const p50 = document.querySelector('#medianPrice');
-const p90 = document.querySelector('#percentilePrice90');
-const p95 = document.querySelector('#percentilePrice95');
+
+const percentile50 = document.querySelector('#medianPrice');
+const percentile90 = document.querySelector('#percentilePrice90');
+const percentile95 = document.querySelector('#percentilePrice95');
+const lastUpdate = document.querySelector('#lastUpdate');
 
 
 /**
@@ -39,6 +41,7 @@ const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
   currentPagination = meta;
 };
+
 
 /**
  * Fetch products from api
@@ -71,28 +74,63 @@ const fetchProducts = async (page = 1, size = 12, brand) => {
 /**
  * Render list of products
  * @param  {Array} products
+ * @param  {String} sortOption
  */
-const renderProducts = products => {
-  const fragment = document.createDocumentFragment();
-  const div = document.createElement('div');
-  const template = products
-    .map(product => {
-      return `
-      <div class="product" id=${product.uuid}>
-        <span>${product.brand}</span>
-        <a href="${product.link}">${product.name}</a>
-        <span>${product.price}</span>
-        <span>${product.released}</span>
-      </div>
-    `;
-    })
-    .join('');
+const renderProducts = (sortedProducts) => {
+  // Sort products by given sort option
 
-  div.innerHTML = template;
-  fragment.appendChild(div);
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
+
+  // create table header
+  const headerRow = document.createElement('tr');
+  const headers = ['Brand', 'Name', 'Price', 'Released'];
+
+  headers.forEach(headerText => {
+    const header = document.createElement('th');
+    header.appendChild(document.createTextNode(headerText));
+    headerRow.appendChild(header);
+  });
+
+  thead.appendChild(headerRow);
+
+  // create table rows for each product
+  sortedProducts.forEach(product => {
+    const productRow = document.createElement('tr');
+
+    const brand = document.createElement('td');
+    brand.appendChild(document.createTextNode(product.brand));
+    productRow.appendChild(brand);
+
+    const name = document.createElement('td');
+    const link = document.createElement('a');
+    link.setAttribute('href', product.link);
+    link.setAttribute('target', '_blank'); // open link in new tab
+    link.appendChild(document.createTextNode(product.name));
+    name.appendChild(link);
+    productRow.appendChild(name);
+
+    const price = document.createElement('td');
+    price.appendChild(document.createTextNode(product.price));
+    productRow.appendChild(price);
+
+    const released = document.createElement('td');
+    released.appendChild(document.createTextNode(product.released));
+    productRow.appendChild(released);
+    
+    tbody.appendChild(productRow);
+  });
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+
   sectionProducts.innerHTML = '<h2>Products</h2>';
-  sectionProducts.appendChild(fragment);
+  sectionProducts.appendChild(table);
 };
+
+
+
 
 /**
  * Render page selector
@@ -109,43 +147,24 @@ const renderPagination = pagination => {
   selectPage.selectedIndex = currentPage - 1;
 };
 
-//update pages
-
-const updatePage = async () => {
-  const page = selectPage.selectedIndex + 1;
-  const size = selectShow.value;
-  const {result, meta} = await fetchProducts(page, size);
-  setCurrentProducts({result, meta});
-  render(currentProducts, currentPagination);
-};
-
-//brand filter 
-
-const brandFilterInput = document.querySelector('#brand-filter');
-brandFilterInput.addEventListener('input', event => {
-  const filterValue = event.target.value.trim().toLowerCase();
-  const filteredProducts = currentProducts.filter(product =>
-    product.brand.toLowerCase().includes(filterValue)
-  );
-  setCurrentProducts({result: filteredProducts, meta: currentPagination});
-  render(currentProducts, currentPagination);
-});
-
 /**
  * Render page selector
  * @param  {Object} pagination
  */
 const renderIndicators = pagination => {
-  const {count} = pagination;
+
+  //count product on page
+  const count = currentProducts.length;
   const newProducts = countNewProducts(currentProducts);
   const brandCount = countBrands(currentProducts);
 
   spanNbProducts.innerHTML = count;
   spanNbNewProducts.innerHTML = newProducts;
   spanNbBrands.innerHTML = brandCount;
-  p50.innerHTML = percentile(currentProducts, 50);
-  p90.innerHTML = percentile(currentProducts, 90);
-  p95.innerHTML = percentile(currentProducts, 95);
+  percentile50.innerHTML = percentile(currentProducts, 0.5);
+  percentile90.innerHTML = percentile(currentProducts, 0.9);
+  percentile95.innerHTML = percentile(currentProducts, 0.95);
+  lastUpdate.innerHTML = mostRecentDate(currentProducts);
 };
 
 
@@ -156,17 +175,24 @@ const render = (products, pagination, sortOption) => {
   renderIndicators(pagination);
 };
 
+
 //sort filter
+/**
+ * Sort products by given sort option
+ * @param  {Array} products
+ * @param  {String} sortOption
+ * @return {Array}
+ */
 const sortProducts = (products, sortOption) => {
   switch(sortOption) {
-    case "price-asc":
+    case 'price-asc':
       return products.sort((a, b) => a.price - b.price);
-    case "price-desc":
+    case 'price-desc':
       return products.sort((a, b) => b.price - a.price);
-    case "date-desc":
-      return products.sort((a, b) => new Date(b.released) - new Date(a.released));
-    case "date-asc":
+    case 'date-asc':
       return products.sort((a, b) => new Date(a.released) - new Date(b.released));
+    case 'date-desc':
+      return products.sort((a, b) => new Date(b.released) - new Date(a.released));
     default:
       return products;
   }
@@ -175,7 +201,7 @@ const sortProducts = (products, sortOption) => {
 //count of new products
 const countNewProducts = (products) => {
   const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 3);
   return products.filter(product => new Date(product.released) > sixMonthsAgo).length;
 }
 
@@ -185,16 +211,22 @@ const countBrands = (products) => {
   return brands.size;
 }
 
-//Percentile on products price series 
+//Percentile on products price on continous series 
 
-function percentile(arr, k) {
-  const prices = products.map(arr => arr.price);
-  prices.sort(function(a, b) { return a - b; });
-  var index = Math.ceil(k / 100 * price.length) - 1;
-  return arr[index];
+const percentile = (products, percentile) => {
+  const prices = products.map(product => product.price);
+  prices.sort((a, b) => a - b);
+  const index = (prices.length - 1) * percentile;
+  const result = Math.floor(index);
+  return prices[result];
 }
 
-
+//Show the most recent date of release on all products
+const mostRecentDate = (products) => {
+  const dates = products.map(product => new Date(product.released));
+  dates.sort((a, b) => b - a);
+  return dates[0];
+}
 
 
 /**
@@ -208,29 +240,40 @@ inputBrandFilter.addEventListener('input', async (event) => {
   const products = await fetchProducts(currentPagination.currentPage, selectShow.value, brand);
 
   setCurrentProducts(products);
-  render(currentProducts, currentPagination);
+  render(currentProducts, currentPagination, selectSort.value);
 });
-
-/**
- * Select the number of products to display
- */
-selectPage.addEventListener("change", updatePage);
 
 selectShow.addEventListener('change', async (event) => {
-  const products = await fetchProducts(currentPagination.currentPage, parseInt(event.target.value));
+  const size = event.target.value;
+
+  const products = await fetchProducts(currentPagination.currentPage, size, null, selectSort.value);
 
   setCurrentProducts(products);
-  render(currentProducts, currentPagination);
+  render(currentProducts, currentPagination, selectSort.value);
 });
 
-selectSort.addEventListener('change', event => {
+selectSort.addEventListener('change', async (event) => {
   const sortOption = event.target.value;
-  render(currentProducts, currentPagination, sortOption);
+
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize, null, sortOption);
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination,selectSort.value);
+});
+
+selectPage.addEventListener('change', async (event) => {
+  const page = event.target.value;
+
+  const products = await fetchProducts(page, currentPagination.pageSize, null, selectSort.value);
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination, selectSort.value);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const products = await fetchProducts();
+  
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
 
   setCurrentProducts(products);
-  render(currentProducts, currentPagination);
+  render(currentProducts, currentPagination,selectSort.value);
 });
