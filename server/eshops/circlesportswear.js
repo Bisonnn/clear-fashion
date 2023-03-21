@@ -14,18 +14,22 @@ const parse = data => {
    
     return $('.product-grid .grid__item')
         .map((i, element) => {
+        const brand = 'CircleSportswear';
         const name = $(element)
             .find('.card__heading.h5 a')
             .text()
             .trim()
             .replace(/\s/g, ' ');
+        const link = $(element)
+            .find('.card__heading.h5 a') // find the link
+            .attr('href'); // get the href attribute
         const price = parseInt(
             $(element)
             .find('.price-item--regular .money')
             .text()
             .replace(/\D/g, '')
         );
-        return {name, price};
+        return {brand, name, link, price};
         })
         .get();
     }

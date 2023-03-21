@@ -15,18 +15,22 @@ const parse = data => {
     
     return $('.product-miniature')
         .map((i, element) => {
+        const brand = 'Montlimart';
         const name = $(element)
             .find('.product-miniature__title')
             .text()
             .trim()
             .replace(/\s/g, ' ');
+        const link = $(element)
+            .find('.product-miniature__title a') // find the link
+            .attr('href'); // get the href attribute
         const price = parseInt(
             $(element)
             .find('.product-miniature__pricing')
             .text()
         );
     
-        return {name, price};
+        return {brand, name, link, price};
         })
         .get();
     }

@@ -11,18 +11,21 @@ const parse = data => {
 
   return $('.productList-container .productList')
     .map((i, element) => {
+      const brand = 'DedicatedBrand';
       const name = $(element)
         .find('.productList-title')
         .text()
         .trim()
         .replace(/\s/g, ' ');
+      const link = $(element)
+        .find('.productList-link') // find the link
+        .attr('href'); // get the href attribute
       const price = parseInt(
         $(element)
           .find('.productList-price')
           .text()
-      );
-
-      return {name, price};
+      );    
+      return {brand, name, link, price};
     })
     .get();
 };
