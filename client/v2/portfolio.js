@@ -58,16 +58,10 @@ const fetchProducts = async (page = 1, size = 12, brand) => {
     }
     const response = await fetch(url);
     const body = await response.json();
-
-    if (body.success !== true) {
-      console.error(body);
-      return {currentProducts, currentPagination};
-    }
-
-    return body.data;
+    console.log(body);
+    return body;
   } catch (error) {
     console.error(error);
-    return {currentProducts, currentPagination};
   }
 };
 
@@ -137,14 +131,14 @@ const renderProducts = (sortedProducts) => {
  * @param  {Object} pagination
  */
 const renderPagination = pagination => {
-  const {currentPage, pageCount} = pagination;
+  const {page, limit} = pagination;
   const options = Array.from(
-    {'length': pageCount},
+    {'length': limit},
     (value, index) => `<option value="${index + 1}">${index + 1}</option>`
   ).join('');
 
   selectPage.innerHTML = options;
-  selectPage.selectedIndex = currentPage - 1;
+  selectPage.selectedIndex = page - 1;
 };
 
 /**
@@ -198,13 +192,6 @@ const sortProducts = (products, sortOption) => {
   }
 };
 
-//count of new products
-const countNewProducts = (products) => {
-  const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 3);
-  return products.filter(product => new Date(product.released) > sixMonthsAgo).length;
-}
-
 //count of brands
 const countBrands = (products) => {
   const brands = new Set(products.map(product => product.brand));
@@ -221,13 +208,6 @@ const percentile = (products, percentile) => {
   return prices[result];
 }
 
-//Show the most recent date of release on all products
-const mostRecentDate = (products) => {
-  const dates = products.map(product => new Date(product.released));
-  dates.sort((a, b) => b - a);
-  return dates[0];
-}
-
 
 /**
  * Declaration of all Listeners
@@ -237,7 +217,7 @@ inputBrandFilter.addEventListener('input', async (event) => {
   const brand = event.target.value;
 
   // fetch products with brand filter
-  const products = await fetchProducts(currentPagination.currentPage, selectShow.value, brand);
+  const products = await fetchProducts(currentPagination.page, selectShow.value, brand);
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination, selectSort.value);
@@ -246,7 +226,7 @@ inputBrandFilter.addEventListener('input', async (event) => {
 selectShow.addEventListener('change', async (event) => {
   const size = event.target.value;
 
-  const products = await fetchProducts(currentPagination.currentPage, size, null, selectSort.value);
+  const products = await fetchProducts(currentPagination.page, size, null, selectSort.value);
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination, selectSort.value);
@@ -255,7 +235,7 @@ selectShow.addEventListener('change', async (event) => {
 selectSort.addEventListener('change', async (event) => {
   const sortOption = event.target.value;
 
-  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize, null, sortOption);
+  const products = await fetchProducts(currentPagination.page, currentPagination.limit, null, sortOption);
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination,selectSort.value);
@@ -264,7 +244,7 @@ selectSort.addEventListener('change', async (event) => {
 selectPage.addEventListener('change', async (event) => {
   const page = event.target.value;
 
-  const products = await fetchProducts(page, currentPagination.pageSize, null, selectSort.value);
+  const products = await fetchProducts(page, currentPagination.limit, null, selectSort.value);
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination, selectSort.value);

@@ -52,19 +52,14 @@ const setCurrentProducts = ({result, meta}) => {
  */
 const fetchProducts = async (page = 1, size = 12, brand) => {
   try {
-    let url = `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`;
+    let url = `https://clear-fashion-bisonnn.vercel.app/products?page=${page}&limit=${size}`;
     if (brand) {
       url += `&brand=${brand}`;
     }
     const response = await fetch(url);
     const body = await response.json();
+    return body;
 
-    if (body.success !== true) {
-      console.error(body);
-      return {currentProducts, currentPagination};
-    }
-
-    return body.data;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
@@ -85,7 +80,7 @@ const renderProducts = (sortedProducts) => {
 
   // create table header
   const headerRow = document.createElement('tr');
-  const headers = ['Brand', 'Name', 'Price', 'Released'];
+  const headers = ['Brand', 'Name', 'Price'];
 
   headers.forEach(headerText => {
     const header = document.createElement('th');
@@ -114,10 +109,6 @@ const renderProducts = (sortedProducts) => {
     const price = document.createElement('td');
     price.appendChild(document.createTextNode(product.price));
     productRow.appendChild(price);
-
-    const released = document.createElement('td');
-    released.appendChild(document.createTextNode(product.released));
-    productRow.appendChild(released);
     
     tbody.appendChild(productRow);
   });
@@ -137,9 +128,9 @@ const renderProducts = (sortedProducts) => {
  * @param  {Object} pagination
  */
 const renderPagination = pagination => {
-  const {currentPage, pageCount} = pagination;
+  const {page, limit} = pagination;
   const options = Array.from(
-    {'length': pageCount},
+    {'length': limit},
     (value, index) => `<option value="${index + 1}">${index + 1}</option>`
   ).join('');
 
@@ -177,7 +168,7 @@ const render = (products, pagination, sortOption) => {
 
 
 //sort filter
-/**
+/*
  * Sort products by given sort option
  * @param  {Array} products
  * @param  {String} sortOption
@@ -189,10 +180,6 @@ const sortProducts = (products, sortOption) => {
       return products.sort((a, b) => a.price - b.price);
     case 'price-desc':
       return products.sort((a, b) => b.price - a.price);
-    case 'date-asc':
-      return products.sort((a, b) => new Date(a.released) - new Date(b.released));
-    case 'date-desc':
-      return products.sort((a, b) => new Date(b.released) - new Date(a.released));
     default:
       return products;
   }
@@ -231,7 +218,7 @@ const mostRecentDate = (products) => {
 
 /**
  * Declaration of all Listeners
- */
+*/ 
 
 inputBrandFilter.addEventListener('input', async (event) => {
   const brand = event.target.value;
@@ -272,8 +259,8 @@ selectPage.addEventListener('change', async (event) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   
-  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+  const products = await fetchProducts();
 
   setCurrentProducts(products);
-  render(currentProducts, currentPagination,selectSort.value);
+  render(currentProducts, currentPagination, selectSort.value);
 });
