@@ -71,7 +71,8 @@ const fetchProducts = async (page = 1, size = 12, brand) => {
  * @param  {Array} products
  * @param  {String} sortOption
  */
-const renderProducts = (sortedProducts) => {
+/*const renderProducts = (sortedProducts) => {
+
   // Sort products by given sort option
 
   const table = document.createElement('table');
@@ -118,6 +119,46 @@ const renderProducts = (sortedProducts) => {
 
   sectionProducts.innerHTML = '<h2>Products</h2>';
   sectionProducts.appendChild(table);
+};*/
+
+const renderProducts = (sortedProducts) => {
+  // Sort products by given sort option
+
+  const grid = document.createElement('div');
+  grid.classList.add('grid');
+
+  // create grid items for each product
+  sortedProducts.forEach(product => {
+    const gridItem = document.createElement('div');
+    gridItem.classList.add('grid-item');
+
+    const image = document.createElement('img');
+    image.setAttribute('src', product.image || 'https://uploads.lebonbon.fr/source/2021/march/2017394/emoji_5_1125.jpg');
+    gridItem.appendChild(image);
+
+    const brand = document.createElement('div');
+    brand.classList.add('brand');
+    brand.appendChild(document.createTextNode(product.brand));
+    gridItem.appendChild(brand);
+
+    const name = document.createElement('div');
+    const link = document.createElement('a');
+    link.setAttribute('href', product.link);
+    link.setAttribute('target', '_blank'); // open link in new tab
+    link.appendChild(document.createTextNode(product.name));
+    name.appendChild(link);
+    gridItem.appendChild(name);
+
+    const price = document.createElement('div');
+    price.classList.add('price');
+    price.appendChild(document.createTextNode(product.price));
+    gridItem.appendChild(price);
+
+    grid.appendChild(gridItem);
+  });
+
+  sectionProducts.innerHTML = '<h2>Products</h2>';
+  sectionProducts.appendChild(grid);
 };
 
 
@@ -135,7 +176,7 @@ const renderPagination = pagination => {
   ).join('');
 
   selectPage.innerHTML = options;
-  selectPage.selectedIndex = currentPage - 1;
+  selectPage.selectedIndex = page- 1;
 };
 
 /**
@@ -146,16 +187,13 @@ const renderIndicators = pagination => {
 
   //count product on page
   const count = currentProducts.length;
-  const newProducts = countNewProducts(currentProducts);
   const brandCount = countBrands(currentProducts);
 
   spanNbProducts.innerHTML = count;
-  spanNbNewProducts.innerHTML = newProducts;
   spanNbBrands.innerHTML = brandCount;
   percentile50.innerHTML = percentile(currentProducts, 0.5);
   percentile90.innerHTML = percentile(currentProducts, 0.9);
   percentile95.innerHTML = percentile(currentProducts, 0.95);
-  lastUpdate.innerHTML = mostRecentDate(currentProducts);
 };
 
 
@@ -184,13 +222,6 @@ const sortProducts = (products, sortOption) => {
       return products;
   }
 };
-
-//count of new products
-const countNewProducts = (products) => {
-  const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 3);
-  return products.filter(product => new Date(product.released) > sixMonthsAgo).length;
-}
 
 //count of brands
 const countBrands = (products) => {

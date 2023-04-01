@@ -1,76 +1,201 @@
 /* Reset default browser styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Basic typography */
-  body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #333;
-  }
-  
-  h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-  }
-  
-  h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    text-align: center;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Basic typography */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+table {
+  margin: 0 auto;
+  width: 50%;
+  border-collapse: collapse;
+  text-align: left;
+  border: 1px solid #333;
+  border-style: double;
+}
+
+section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.grid-item {
+  display: flex;
+  background-image: url('https://images.unsplash.com/photo-1554034483-04fda0d3507b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.grid-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+.brand {
+  font-weight: bold;
+  margin: 25px 0;
+  size: 20px;
+}
+
+.brand-filter {
+  margin: 10px 0;
+}
+
+.price {
+  font-weight: bold;
+  color: green;
+}
+
+/* Form styles */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  display: block;
+  width: 20%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  margin-left: 40%;
+}
+
+.error {
+  color: #f00;
+}
+
+.success {
+  color: #0f0;
+}
+
+/* Background */
+body {
+  background-image: url("https://cdn.wallpapersafari.com/15/56/rZJpjL.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Indicators */
+#indicators {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  margin: 0 auto;
+  width: 50%;
+}
+
+#indicators h2 {
+  margin-top: 20px;
+}
+
+#indicators div {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#indicators span {
+  font-weight: bold;
+}
+
+#indicators #nbProducts {
+  color: #fc5185;
+}
+
+#indicators #nbBrands {
+  color: #364f6b;
+}
+
+#indicators #medianPrice {
+  color: #43dde6;
+}
+
+#indicators #percentilePrice90 {
+  color: #fc5185;
+}
+
+#indicators #percentilePrice95 {
+  color: #364f6b;
+}
+
+/* Options */
+#options {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  margin: 0 auto;
+  width: 50%;
+}
+
+#options #show,
+#options #page,
+#options #filters,
+#options #sort {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+  /* Button styles */
+  button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
   }
 
-  table {
-    margin: 0 auto;
-    width: 50%;
-    border-collapse: collapse;
-    text-align: left;
-    border: 1px solid #333;
-    border-style: double;
-  }
-  
-  section {
-    margin-bottom: 20px;
-    text-align: center;
+  button:hover {
+    background-color: #555;
   }
 
-  /* Form styles */
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold
+  /* Pagination styles */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
   }
 
-    input {
-        display: block;
-        width: 20%;
-        padding: 5px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        text-align: center;
-        margin-left: 40%;
-    }
+  .pagination button {
+    margin: 0 5px;
+  }
 
-    .error {
-        color: #f00;
-    }
-
-    .success {
-        color: #0f0;
-    }
-
-    /* background */
-
-    body {
-        background-image: url("https://i.pinimg.com/564x/c1/f0/b3/c1f0b38505d286dcb53789dbe3c1acd0.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
+  .pagination .active {
+    background-color: #333;
+    color: #fff;
+  }
 

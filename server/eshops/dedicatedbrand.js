@@ -17,15 +17,19 @@ const parse = data => {
         .text()
         .trim()
         .replace(/\s/g, ' ');
-      const link = $(element)
+      const templink = $(element)
         .find('.productList-link') // find the link
         .attr('href'); // get the href attribute
       const price = parseInt(
         $(element)
           .find('.productList-price')
           .text()
-      );    
-      return {brand, name, link, price};
+      )
+      const image = $(element)
+        .find('.productList-image img')
+        .attr('data-src');
+    const link = "https://www.dedicatedbrand.com" + templink;
+      return {brand, name, link, price, image};
     })
     .get();
 };

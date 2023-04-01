@@ -29,8 +29,10 @@ const parse = data => {
             .find('.product-miniature__pricing')
             .text()
         );
-    
-        return {brand, name, link, price};
+        const image = $(element)
+            .find('.product-miniature__thumb-link img')
+            .attr('data-src');
+        return {brand, name, link, price, image};
         })
         .get();
     }

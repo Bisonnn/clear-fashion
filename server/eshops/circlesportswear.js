@@ -20,7 +20,7 @@ const parse = data => {
             .text()
             .trim()
             .replace(/\s/g, ' ');
-        const link = $(element)
+        const templink = $(element)
             .find('.card__heading.h5 a') // find the link
             .attr('href'); // get the href attribute
         const price = parseInt(
@@ -29,7 +29,12 @@ const parse = data => {
             .text()
             .replace(/\D/g, '')
         );
-        return {brand, name, link, price};
+        const tempImage = $(element)
+            .find('.card__media img')
+            .attr('src');
+        image = "https:" + tempImage;
+    const link = "https://shop.circlesportswear.com/" + templink;
+        return {brand, name, link, price, image};
         })
         .get();
     }

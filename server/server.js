@@ -65,8 +65,25 @@ async function insertProducts() {
       await client.close();
     }
   }
+
+//Method to clear the database
+async function clearProducts() {
+    try {
+      await client.connect();
+      const db = client.db(MONGODB_DB_NAME);
+      const collection = db.collection(MONGODB_DB_COLLECTION);
+      await collection.deleteMany({});
+      console.log(`Deleted all products from ${MONGODB_DB_COLLECTION}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await client.close();
+    }
+  }
   
-module.exports = {insertProducts, getProducts, scrape};
+  insertProducts();
+  
+module.exports = {insertProducts, getProducts, clearProducts, scrape};
 
 
 

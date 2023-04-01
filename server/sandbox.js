@@ -9,7 +9,7 @@ const allProducts = [];
 
 console.log(process.argv);
 
-async function dedicatedbrandScrap (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
+async function dedicatedbrandScrap (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} eshop`);
 
@@ -51,8 +51,7 @@ const getProduct = async () => {
   await dedicatedbrandScrap();
   await montlimarScrap();
   await circlesportsScrap();
-  //delete sub array in allProducts to have only one array
-  //modify the array to be an array of object
+  console.log(allProducts.flat());
   return allProducts.flat();
 }
 
