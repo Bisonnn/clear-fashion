@@ -17,7 +17,6 @@ async function scrape(){
     console.log('yes');
 }
 
-
 /**
  * Find products based on query
  * @param  {Array}  query

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>👕Clear fashion👕</h1>
+    <section id="options">
+      <div id="show">
+        <label for="show-select">Show:</label>
+        <select name="show" id="show-select">
+          <option value="12">12</option>
+          <option value="24">24</option>
+          <option value="48">48</option>
+        </select>
+      </div>
+      <div id="page">
+        <label for="page-select">Go to page:</label>
+        <select name="page" id="page-select"> </select>
+      </div>
+      <div id="filters">
+        <div id="brand">
+          <label for="brand-filter">Filter by brand:</label>
+          <input type="text" id="brand-filter" placeholder="Enter brand name">
+        </div>
+      </div>
+      <div id="sort">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select">
+          <option value="price-asc">Cheaper</option>
+          <option value="price-desc">Expensive</option>
+          <option value="date-desc">Recently Released</option>
+          <option value="date-asc">Anciently Released</option>
+        </select>
+      </div>
+    </section>
+    <section id="indicators">
+      <h2>Indicators</h2>
+      <div>
+        <span>Number products</span>
+        <span id="nbProducts">0</span>
+      </div>
+      <div>
+        <span>Number of brands</span>
+        <span id="nbBrands">0</span>
+      </div>
+      <div>
+        <span>Number of recent products</span>
+        <span id="nbRecentProducts">0</span>
+      </div>
+      </div>
+      <div>
+        <span>Median price</span>
+        <span id="medianPrice">0</span>
+      </div>
+      <div>
+        <span>90th percentile price</span>
+        <span id="percentilePrice90">0</span>
+      </div>
+      <div>
+        <span>95th percentile price</span>
+        <span id="percentilePrice95">0</span>
+      </div>
+      <div>
+        <span>Last released date</span>
+        <span id="lastUpdate">---</span>
+      </div>
+    </section>
+    <section id="products"></section>
+    <script type="text/javascript" charset="UTF-8" src="portfolio.js"></script>
+    </section>
+  </body>
+</html>
+
+
+
