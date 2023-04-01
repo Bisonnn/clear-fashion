@@ -3,7 +3,8 @@ const express = require('express');
 const helmet = require('helmet');
 const db = require('./server.js');
 
-const PORT = 8092;
+const PORT = process.env.PORT || 8092;
+const SERVER_TIMEOUT = 120000; // set server timeout to 2 minutes
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.get('/', (request, response) => {
   response.send({'ack': true});
 });
 
-//create an asyncy function tp get productucts from the mongodb database it takes the page and the limit as parameters
+//create an asyncy function to get products from the mongodb database it takes the page and the limit as parameters
 app.get('/products/', async (request, response) => {
   try {
     const page = parseInt(request.query.page)
@@ -28,13 +29,17 @@ app.get('/products/', async (request, response) => {
     const brand = request.query.brand
     const sort = request.query.sort
 
-    const products = await db.getProducts(page, limit, brand, price, sort);
+    // set the timeout option to 2 minutes
+    const products = await db.getProducts(page, limit, brand, price, sort, { timeout: 120000 });
     response.send(products);
   } catch (error) {
     console.error(error);
   }
 });
 
-app.listen(PORT);
+// set the server timeout to 2 minutes
+const server = app.listen(PORT, () => {
+  console.log(`📡 Running on port ${PORT}`);
+});
 
-console.log(`📡 Running on port ${PORT}`);
+server.setTimeout(SERVER_TIMEOUT);
