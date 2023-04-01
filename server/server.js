@@ -22,40 +22,24 @@ async function scrape(){
  * @param  {Array}  query
  * @return {Array}
  */
-async function getProducts(page = 1, limit = 12, brand = null, price = null, sort = null) {
+async function getProducts(page=1, limit=12, brand=null, price=null) {
   try {
-    await client.connect();
-    const db = client.db(MONGODB_DB_NAME);
-    const collection = db.collection(MONGODB_DB_COLLECTION);
-
-    let query = {};
-
+    const db = await client.connect();
+    const collection = db.db(MONGODB_DB_NAME).collection(MONGODB_DB_COLLECTION);
+    
+    // Implement pagination
+    const offset = (page - 1) * limit;
+    const query = {};
     if (brand) {
       query.brand = brand;
     }
-
     if (price) {
       query.price = { $lt: price };
     }
+    const total = await collection.countDocuments(query);
+    const products = await collection.find(query).sort({price: 1}).skip(offset).limit(limit).toArray();
 
-    let sortQuery = {};
-
-    if (sort) {
-      if (sort === 'asc') {
-        sortQuery.price = 1;
-      } else if (sort === 'desc') {
-        sortQuery.price = -1;
-      }
-    }
-
-    let products = await collection.find(query).sort(sortQuery).toArray();
-
-    const total = products.length;
-    const pages = Math.ceil(total / limit);
-    const offset = (page - 1) * limit;
-    products = products.slice(offset, offset + limit);
-
-    return { result: products, meta: { total, pages, page, limit } };
+    return { result: products, meta: { total, page, limit } };
   } catch (error) {
     console.error(error);
   } finally {
